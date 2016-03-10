@@ -55,8 +55,18 @@ for episode_url in episode_urls:
         dialog = dialog.encode('utf-8')
         all_scripts_dict[character].append(dialog)
 
+# Clean up my character list
+for key in all_scripts_dict.keys():
+    if '[' in key or '(' in key or '#' in key:
+      real_key = key.split()[0]
+
+      all_scripts_dict[real_key].extend(all_scripts_dict[key])
+      all_scripts_dict.pop(key, None)
+
+all_scripts_dict.pop('FUTURAMA', None)
+all_scripts_dict.pop('THE END', None)
 
 # pickle my results
-with open('futurama_scripts.pkl','w') as f:
-  pickle.dump([all_scripts_dict, episode_slug_list, episode_urls], f)
+with open('futurama_scripts.pkl','wb') as f:
+  pickle.dump(all_scripts_dict, f)
 
